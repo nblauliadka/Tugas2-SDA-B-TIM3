@@ -109,3 +109,95 @@ void shell_sort(char arr[][MAX_WORD_LEN], int n) {
         gap /= 3;
     }
 }
+
+// untuk menyimpan kata yang asli dan yang untuk di shuffle
+static char g_words[MAX_WORDS][MAX_WORD_LEN];
+static char g_work [MAX_WORDS][MAX_WORD_LEN];   
+static int  g_word_count = 0;                   
+
+void menu_advance_sorting(void) {
+    // muat dataset
+    if (g_word_count == 0) {
+        printf("\n  Memuat dataset kata dari '%s' ...\n", DATASET_FILE);
+        g_word_count = load_words(DATASET_FILE, g_words, MAX_WORDS);
+        if (g_word_count == 0) return;  
+        printf("  Berhasil memuat %d kata.\n", g_word_count);
+    }
+
+    int pilih;
+    while (1) {
+        printf("\n===== ADVANCE SORTING =====\n");
+        printf("1. Merge Sort\n");
+        printf("2. Quick Sort\n");
+        printf("3. Shell Sort\n");
+        printf("4. Kembali\n");
+        printf("Pilih metode : ");
+
+        if (scanf("%d", &pilih) != 1) {
+            while (getchar() != '\n');
+            printf("  Input tidak valid!\n");
+            continue;
+        }
+
+        if (pilih == 4) break;
+        if (pilih < 1 || pilih > 3) {
+            printf("  Pilihan tidak valid! Masukkan angka 1-4.\n");
+            continue;
+        }
+
+        // Salin data asli ke buffer kerja (untuk di shuffle)
+        for (int i = 0; i < g_word_count; i++)
+            strcpy(g_work[i], g_words[i]);
+
+        printf("\nData SEBELUM shuffle & sorting (%d kata pertama dari %d):\n", DISPLAY_COUNT, g_word_count);
+        cetak_pemisah();
+        tampil_str(g_work, g_word_count);
+
+        // shuffle dimulai
+        srand((unsigned int)time(NULL));
+        shuffle_str(g_work, g_word_count);
+
+        printf("\nData SESUDAH shuffle, SEBELUM sorting (%d kata pertama):\n", DISPLAY_COUNT);
+        cetak_pemisah();
+        tampil_str(g_work, g_word_count);
+
+        // mengukur waktu (start)
+        clock_t     start, end;
+        const char *nama_algo;
+
+        switch (pilih) {
+            case 1:
+                nama_algo = "Merge Sort";
+                start = clock();
+                merge_sort(g_work, 0, g_word_count - 1);
+                end = clock();
+                break;
+            case 2:
+                nama_algo = "Quick Sort";
+                start = clock();
+                quick_sort(g_work, 0, g_word_count - 1);
+                end = clock();
+                break;
+            case 3:
+                nama_algo = "Shell Sort";
+                start = clock();
+                shell_sort(g_work, g_word_count);
+                end = clock();
+                break;
+            default:
+                continue;
+        }
+
+        // mengukur waktu (end)
+        double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+
+        printf("\nData SETELAH sorting — %s (%d kata pertama):\n", nama_algo, DISPLAY_COUNT);
+        cetak_pemisah();
+        tampil_str(g_work, g_word_count);
+        cetak_pemisah();
+        printf("  Algoritma     : %s\n", nama_algo);
+        printf("  Jumlah Data   : %d kata\n", g_word_count);
+        printf("  Waktu Eksekusi: %.6f detik\n", elapsed);
+        cetak_pemisah();
+    }
+}
