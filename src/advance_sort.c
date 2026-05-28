@@ -40,3 +40,49 @@ void merge_sort(char arr[][MAX_WORD_LEN], int left, int right) {
         merge(arr, left, mid, right);
     }
 }
+
+// untuk memilih pivot dengan mengambil nilai yang ditengah
+static void median_of_three(char arr[][MAX_WORD_LEN], int low, int high) {
+    int mid = low + (high - low) / 2;
+
+    if (strcmp(arr[low],  arr[mid])  > 0) swap_str(arr[low],  arr[mid]);
+    if (strcmp(arr[low],  arr[high]) > 0) swap_str(arr[low],  arr[high]);
+    if (strcmp(arr[mid],  arr[high]) > 0) swap_str(arr[mid],  arr[high]);
+
+    swap_str(arr[mid], arr[high]);
+}
+
+// return indexs terakhir pivot
+static int partition(char arr[][MAX_WORD_LEN], int low, int high) {
+    median_of_three(arr, low, high);
+
+    char pivot[MAX_WORD_LEN];
+    strcpy(pivot, arr[high]);
+
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (strcmp(arr[j], pivot) <= 0) {
+            i++;
+            swap_str(arr[i], arr[j]);
+        }
+    }
+    swap_str(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+void quick_sort(char arr[][MAX_WORD_LEN], int low, int high) {
+    while (low < high) {
+        int pi = partition(arr, low, high);
+
+        /* Rekursi pada partisi yang lebih kecil */
+        if (pi - low < high - pi) {
+            quick_sort(arr, low, pi - 1);
+            // partisi kanan
+            low = pi + 1;
+        } else {
+            quick_sort(arr, pi + 1, high);
+            // partisi kiri
+            high = pi - 1;
+        }
+    }
+}
