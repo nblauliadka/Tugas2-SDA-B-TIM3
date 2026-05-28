@@ -86,3 +86,26 @@ void quick_sort(char arr[][MAX_WORD_LEN], int low, int high) {
         }
     }
 }
+
+void shell_sort(char arr[][MAX_WORD_LEN], int n) {
+    // Hitung gap awal terbesar dalam urutan 
+    int gap = 1;
+    while (gap < n / 3)
+        gap = 3 * gap + 1;
+
+    // Insertion sort supaya gap nya makin sedikit
+    while (gap >= 1) {
+        for (int i = gap; i < n; i++) {
+            char temp[MAX_WORD_LEN];
+            strcpy(temp, arr[i]);
+
+            int j = i;
+            while (j >= gap && strcmp(arr[j - gap], temp) > 0) {
+                strcpy(arr[j], arr[j - gap]);
+                j -= gap;
+            }
+            strcpy(arr[j], temp);
+        }
+        gap /= 3;
+    }
+}
