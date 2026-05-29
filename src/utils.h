@@ -10,4 +10,7 @@
 void swap_int(int *a, int *b);
 void swap_str(char a[], char b[]);
 
+void shuffle_int(int arr[], int n);
+void shuffle_str(char arr[][MAX_WORD_LEN], int n);
+
 #endif /* UTILS_H */
