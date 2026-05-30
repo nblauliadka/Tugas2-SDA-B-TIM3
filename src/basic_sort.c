@@ -35,3 +35,42 @@ void insertion_sort(int arr[], int n) {
         arr[j + 1] = key;
     }
 }
+
+/* Memilih nilai terkecil lalu menempatkannya di posisi yang benar */
+void selection_sort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int min_idx = i;
+
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_idx])
+                min_idx = j;
+        }
+
+        if (min_idx != i)
+            swap_int(&arr[i], &arr[min_idx]);
+    }
+}
+
+void menu_sorting_dasar(void) {
+    int pilih;
+
+    while (1) {
+        printf("\n===== SORTING DASAR =====\n");
+        printf("1. Bubble Sort\n");
+        printf("2. Insertion Sort\n");
+        printf("3. Selection Sort\n");
+        printf("4. Kembali\n");
+        printf("Pilih metode : ");
+
+        if (scanf("%d", &pilih) != 1) {
+            while (getchar() != '\n');
+            printf("Input tidak valid!\n");
+            continue;
+        }
+
+        if (pilih == 4) break;
+
+        if (pilih < 1 || pilih > 3) {
+            printf("Pilihan tidak valid! Masukkan angka 1-4.\n");
+            continue;
+        }
