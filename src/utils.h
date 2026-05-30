@@ -12,5 +12,9 @@ void swap_str(char a[], char b[]);
 
 void shuffle_int(int arr[], int n);
 void shuffle_str(char arr[][MAX_WORD_LEN], int n);
+void cetak_pemisah(void);
+void tampil_int(int arr[], int n);
+void tampil_str(char arr[][MAX_WORD_LEN], int n);
+int load_words(const char *filename, char words[][MAX_WORD_LEN], int max_words);
 
 #endif
